@@ -1,0 +1,16 @@
+[
+{
+  "modid": "${version}",
+  "name": "SkyStats",
+  "description": "In-game skyblock player stalker.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/users/Hammoi",
+  "updateUrl": "",
+  "authorList": ["Hammoi"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
