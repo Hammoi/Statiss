@@ -1,4 +1,6 @@
-This project is currently in beta. Expect bugs.
+This project is currently in beta. Expect to see some bugs crawling around.
+
+A description of Statiss can be found here: https://github.com/Hammoi/Statiss/wiki
 
 Setup:
   On the Hypixel server, run /api new to generate an API key. If you already have one, skip this step.
