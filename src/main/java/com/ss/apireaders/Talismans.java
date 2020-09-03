@@ -13,8 +13,7 @@ import com.ss.info.Decompress;
 import com.ss.info.PlayerAPI;
 import com.ss.info.TalismanGroups;
 import com.ss.info.Util;
-
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
 
 public class Talismans {
 
