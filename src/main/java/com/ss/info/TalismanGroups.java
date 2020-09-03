@@ -3,7 +3,7 @@ package com.ss.info;
 import java.util.HashMap;
 import java.util.Map;
 
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
 
 public enum TalismanGroups {
 	SPEED("Speed Talisman", "Speed Ring", "Speed Artifact"),
