@@ -47,7 +47,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.querz.nbt.io.NBTDeserializer;
 import net.querz.nbt.io.NBTUtil;
 import net.querz.nbt.io.NamedTag;
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
 import scala.util.parsing.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
