@@ -8,7 +8,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
 
 public class Sshelp implements ICommand {
 
