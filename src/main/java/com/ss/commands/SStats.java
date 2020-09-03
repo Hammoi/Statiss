@@ -45,7 +45,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.querz.nbt.io.NBTDeserializer;
 import net.querz.nbt.io.NamedTag;
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
 
 public class SStats implements ICommand {
 
