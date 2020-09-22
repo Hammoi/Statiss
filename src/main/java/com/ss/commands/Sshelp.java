@@ -58,10 +58,10 @@ public class Sshelp implements ICommand {
 	public void processCommand(ICommandSender arg0, String[] arg1) throws CommandException {
 		EntityPlayer player = (EntityPlayer) arg0;
 		player.addChatMessage(new ChatComponentTranslation("§8--------------------------------\n"
-				+ "§6SkyStats Commands\n"
-				+ "§e   /skystats [player name] §7- §8Lookup Skyblock stats of player.\n"
+				+ "§6Statiss Commands\n"
+				+ "§e   /ss [player name] §7- §8Lookup Skyblock stats of player.\n"
 				+ "§e      §7Alias: §e/ss\n"
-				+ "§e   /skystatscontrols §7- §8SkyStats control panel.\n"
+				+ "§e   /sscontrols §7- §8Statiss control panel.\n"
 				+ "§e      §7Alias: §e/ssc\n"
 				+ "§8--------------------------------"));
 

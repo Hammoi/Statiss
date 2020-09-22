@@ -22,7 +22,6 @@ public class Profiles {
 		if(activeProfile == null) {
 			ArrayList<JsonObject> profiles = new ArrayList<JsonObject>();
 			ArrayList<Long> lastLogins = new ArrayList<Long>();
-			//JsonObject activeProfile = new JsonObject();
 			try {
 
 				for(Entry<String, JsonElement> profile : PlayerAPI.getJsonAPI().getAsJsonObject("stats").getAsJsonObject("SkyBlock").getAsJsonObject("profiles").entrySet()) {
@@ -54,7 +53,7 @@ public class Profiles {
 			}
 		}
 
-
+		System.out.println(activeProfile);
 		return activeProfile;
 	}
 

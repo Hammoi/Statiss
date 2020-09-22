@@ -22,8 +22,8 @@ plugins {
 }
 */
 version = "1.0.0"
-group= "hammoi.skystats" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "skystats"
+group= "hammoi.statiss" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "statiss"
 
 configurations {
     shade

@@ -1,8 +1,8 @@
 package com.ss;
 
 public class Reference {
-	public static final String MODID = "skystats";
-	public static final String MODNAME = "SkyStats";
-	public static final String VERSION = "1.0.0";
+	public static final String MODID = "statiss";
+	public static final String MODNAME = "Statiss";
+	public static final String VERSION = "0.9.2";
 	
 }

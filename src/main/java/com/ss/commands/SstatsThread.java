@@ -31,6 +31,7 @@ import com.ibm.icu.math.BigDecimal;
 import com.ss.Config;
 import com.ss.apireaders.Armor;
 import com.ss.apireaders.Damage;
+import com.ss.apireaders.Dungeons;
 import com.ss.apireaders.FairySouls;
 import com.ss.apireaders.Inventory;
 import com.ss.apireaders.OnlineStatus;
@@ -252,6 +253,10 @@ public class SstatsThread implements Runnable{
 				"§7Karma: §d" + playerInfo.getKarma();
 
 		System.out.println("SS: Grabbed character information.");
+		
+		if(Config.getDebugMode()) {
+			sendMessage(player, "§7Grabbed character information.");
+		}
 
 		String guildHover = new String();
 
@@ -263,9 +268,15 @@ public class SstatsThread implements Runnable{
 					"§7Members: §e" + guild.getMemberCount() + "\n" + 
 					"§7Guildmaster: " + Prefix.getPlayerRankString(guild.getGuildMasterUUID()) + PlayerAPI.UUIDtoName(guild.getGuildMasterUUID());
 			System.out.println("SS: Grabbed player's guild information.");
+			if(Config.getDebugMode()) {
+				sendMessage(player, "§7Grabbed player's guild information.");
+			}
 		} else {
 			guildHover = "";
 			System.out.println("SS: Didn't grab player's guild information since they're not in one.");
+			if(Config.getDebugMode()) {
+				sendMessage(player, "§7Didn't grab player's guild information since they're not in one.");
+			}
 		}
 
 		String fullName = prefix.getPlayerRankString() + PlayerAPI.getJsonAPI().get("displayname").getAsString();
@@ -316,7 +327,10 @@ public class SstatsThread implements Runnable{
 
 
 				System.out.println("SS: Grabbed player's skyblock profile names.");
-
+				
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Grabbed player's skyblock profile names.");
+				}
 
 				StringBuilder memberString = new StringBuilder();
 				if(profile.getProfileMembers() != null) {
@@ -328,6 +342,10 @@ public class SstatsThread implements Runnable{
 
 				System.out.println("SS: Grabbed player's co-op members.");
 
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Grabbed player's co-op members.");
+				}
+				
 				DateTimeFormatter formatter =
 						DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 						.withLocale(Locale.US)
@@ -346,6 +364,11 @@ public class SstatsThread implements Runnable{
 
 				System.out.println("SS: Grabbed player's skyblock profile information.");
 
+
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Grabbed player's skyblock profile information.");
+				}
+				
 				double skillAverage = Double.parseDouble(String.format(Locale.US, "%.2f", ((double) skills.getMining() +
 						skills.getCombat() +
 						skills.getForaging() +
@@ -370,7 +393,10 @@ public class SstatsThread implements Runnable{
 
 				System.out.println("SS: Grabbed player's skyblock skills information.");
 
-
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Grabbed player's skyblock skills information.");
+				}
+				
 				String petHover = new String();
 
 				if(pets.getPetsSortedByExp().equals("")) {
@@ -382,6 +408,10 @@ public class SstatsThread implements Runnable{
 
 				System.out.println("SS: Grabbed player's skyblock pets information.");
 
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Grabbed player's skyblock pets information.");
+				}
+				
 				info.addAll(Arrays.asList(new IChatComponent[] {
 						new ChatComponentTranslation("§8--------------------------------"),
 						hoverText("§8Stats of ", new String[] {fullName + " ", guild.getGuildTag()}, new String[] {playerProfileHover, guildHover}),
@@ -408,11 +438,14 @@ public class SstatsThread implements Runnable{
 						info.add(hoverText("   ", new String[] {gameItem.getName()}, new String[] {gameItem.getLore()}));
 					}
 				} else info.add(new ChatComponentTranslation("   §cInventory API is disabled."));
-				info.add(clickText("§eNext Page", new SStats().getCommandName() + " " + args[0] + (args.length > 1 ? " " + profileName : "") + " 2"));
+				info.add(clickText("§eNext Page", new SStats().getCommandName() + " " + args[0] + (profileName != null ? " " + profileName : "") + " 2"));
 
 				info.add(new ChatComponentTranslation("§8--------------------------------"));
 
 				System.out.println("SS: Successfully sent player info.");
+				if(Config.getDebugMode()) {
+					sendMessage(player, "§7Successfully sent player info.");
+				}
 			} else {
 				switch(pageNumber) {
 				case "2":
@@ -474,8 +507,40 @@ public class SstatsThread implements Runnable{
 							new ChatComponentTranslation("§7Unique Talismans: " + (inventory.getInventoryAPIStatus() ? (new Integer(totalUniqueTalismans.size()) >= Talismans.totalTalismans ? "§6" : "§e") + totalUniqueTalismans.size() + "§7/§6" + Talismans.totalTalismans : "§cAPI is Disabled.")),
 							new ChatComponentTranslation("§7Purse: §6" + formatter.format(BigDecimal.valueOf(purse.getPurse()))),
 							new ChatComponentTranslation("§7Highest Critical Damage: §e" + dmg.getHighestCrit()),
+							clickText("§eNext Page", new SStats().getCommandName() + " " + args[0] + (profileName != null ? " " + profileName : "") + " 3"),
 							new ChatComponentTranslation("§8--------------------------------")
 					}));
+					System.out.println("SS: Successfully sent page two of player's info.");
+					
+					if(Config.getDebugMode()) {
+						sendMessage(player, "§7Successfully sent page two of player's info.");
+					}
+					
+					break;
+				case "3":
+					
+					Dungeons dungeons = new Dungeons();
+					
+					info.addAll(Arrays.asList(new IChatComponent[] {	
+							new ChatComponentTranslation("§8--------------------------------"),
+							hoverText("§8Stats of ", new String[] {fullName + " ", guild.getGuildTag()}, new String[] {playerProfileHover, guildHover}),
+							new ChatComponentTranslation("§cCatacombs§7 Level: " + ColorCode.skillColor(dungeons.getCatacombsLevel())),
+							new ChatComponentTranslation("§7Active Class: " + (dungeons.getActiveClass().equals("") ? "§cN/A" : "§a" + dungeons.getActiveClass())),
+							new ChatComponentTranslation("§7Class Levels:"),
+							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("archer") ? "§a" : "§7") + "   Archer§7: " + ColorCode.skillColor(dungeons.getArcherLevel())),
+							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("berserk") ? "§a" : "§7") + "   Berserk§7: " + ColorCode.skillColor(dungeons.getBerserkLevel())),
+							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("mage") ? "§a" : "§7") + "   Mage§7: " + ColorCode.skillColor(dungeons.getMageLevel())),
+							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("tank") ? "§a" : "§7") + "   Tank§7: " + ColorCode.skillColor(dungeons.getTankLevel())),
+							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("healer") ? "§a" : "§7") + "   Healer§7: " + ColorCode.skillColor(dungeons.getHealerLevel())),
+							new ChatComponentTranslation("§8--------------------------------")
+					}));
+					
+					System.out.println("SS: Successfully sent page three of player's info.");
+					
+					if(Config.getDebugMode()) {
+						sendMessage(player, "§7Successfully sent page three of player's info.");
+					}
+					
 					break;
 				}
 				//Auction Info
@@ -483,6 +548,11 @@ public class SstatsThread implements Runnable{
 			} 
 		} else {
 			System.out.println("SS: Player does not play skyblock.");
+			
+			if(Config.getDebugMode()) {
+				sendMessage(player, "§7Player does not play skyblock.");
+			}
+			
 			info.addAll(Arrays.asList(new IChatComponent[] {
 					new ChatComponentTranslation("§8--------------------------------"),
 					hoverText("§8Stats of " + fullName + " ", new String[] {guild.getGuildTag()}, new String[] {guildHover}),
@@ -490,6 +560,10 @@ public class SstatsThread implements Runnable{
 					new ChatComponentTranslation("§8--------------------------------")
 			}));
 			System.out.println("SS: Successfully sent player info.");
+			
+			if(Config.getDebugMode()) {
+				sendMessage(player, "§7Successfully sent player info.");
+			}
 		}
 
 

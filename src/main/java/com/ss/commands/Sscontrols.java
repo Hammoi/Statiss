@@ -106,7 +106,8 @@ public class Sscontrols implements ICommand {
 		EntityPlayer player = (EntityPlayer) sender;
 		String[] help = {"§e/sscontrol restartapi §8- §7Restarts the API Reader.",
 				"§e/sscontrol setApiKey [key] §8- §7Sets the Hypixel API key.",
-		"§e/sscontrol getApiKey §8- §7Returns your current API key."};
+		"§e/sscontrol getApiKey §8- §7Returns your current API key.",
+		"§e/sscontrol toggleDebug §8- §7Toggles debug mode."};
 		if(args.length == 0) {
 			sendMessages(player, help);
 		} else {
@@ -144,6 +145,16 @@ public class Sscontrols implements ICommand {
 					sendMessage(player, "§cYou have not set an API key. Set one using /ssc setApiKey [key].");
 				}
 				break;
+			case "toggledebug":
+				System.out.println(Config.getDebugMode());
+				if(Config.getDebugMode()) {
+					Config.toggleDebug(false);
+				} else {
+					Config.toggleDebug(true);
+				}
+				
+				
+				break;
 			default:
 				sendMessages(player, help);
 				break;
@@ -167,7 +178,7 @@ public class Sscontrols implements ICommand {
 		if(args.length <= 1) {
 			String firstArg = args[0];
 
-			ArrayList<String> commands = new ArrayList<>(Arrays.asList(new String[] {"restartApi", "setApiKey", "getApiKey"}));
+			ArrayList<String> commands = new ArrayList<>(Arrays.asList(new String[] {"restartApi", "setApiKey", "getApiKey", "toggleDebug"}));
 			if(!firstArg.isEmpty()) {
 				ArrayList<String> validCommands = new ArrayList<>();
 

@@ -87,10 +87,19 @@ public class SStats implements ICommand {
 				break;
 			case 2:
 				if(args[1].matches("-?(0|[1-9]\\d*)")) {
-					if(args[1].equals("2") || args[1].equals("1")) {
+					switch(args[1]) {
+					case "1":
+						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to look up stats of §6" + args[0] + "§7..."));
+						break;
+					case "2":
 						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to load second page of §6" + args[0] + "§7's stats..."));
-					} else {
+						break;
+					case "3":
+						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to load third page of §6" + args[0] + "§7's stats..."));
+						break;
+					default:
 						sender.addChatMessage(new ChatComponentTranslation("§cInvalid page."));
+						break;
 					}
 				} else {
 					sender.addChatMessage(new ChatComponentTranslation("§7Attempting to look up stats of §6" + args[0] + "§7's profile §d" + args[1] + " §7..."));
@@ -108,10 +117,20 @@ public class SStats implements ICommand {
 				}
 
 				if(profileName != null && pageNumber != null) {
-					if(pageNumber.equals("2") || pageNumber.equals("1")) {
+					
+					switch(pageNumber) {
+					case "1":
+						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to look up stats of §6" + args[0] + "§7's profile §d" + args[1] + " §7..."));
+						break;
+					case "2":
 						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to load second page of §6" + args[0] + "§7's profile §d" + profileName + "§7's stats..."));
-					} else {
+						break;
+					case "3":
+						sender.addChatMessage(new ChatComponentTranslation("§7Attempting to load third page of §6" + args[0] + "§7's profile §d" + profileName + "§7's stats..."));
+						break;
+					default:
 						sender.addChatMessage(new ChatComponentTranslation("§cInvalid page."));
+						break;
 					}
 				}
 				break;
@@ -135,6 +154,7 @@ public class SStats implements ICommand {
 
 		
 		if(args.length == 1) {
+			
 		String firstArg = args[0];
 
 

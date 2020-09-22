@@ -26,7 +26,8 @@ public class Config {
 	private static File configFile;
 	private static FileReader fr;
 	private static UUID apiKey;
-	
+	private static Boolean debugMode;
+
 	public static void setUpConfig(File cFile) {
 
 		configFile = cFile;
@@ -52,7 +53,7 @@ public class Config {
 
 		if(c.length() != 0) {
 			try {
-			config = new Gson().fromJson(c.toString(), JsonObject.class);
+				config = new Gson().fromJson(c.toString(), JsonObject.class);
 			} catch(JsonSyntaxException e) {
 				config = new JsonObject();
 				createConfig();
@@ -66,13 +67,14 @@ public class Config {
 
 	public static void createConfig() {
 		writeConfig("APIKey", "");
+		writeConfig("Debug", false);
 	}
 
 
 	public static boolean writeConfig(String key, String value) {
 		if(config.has(key)) {
 			config.remove(key);
-			
+
 		}
 		config.addProperty(key, value);
 		try {
@@ -85,7 +87,31 @@ public class Config {
 			System.out.println("SS: Something went wrong while writing to config.");
 			return false;
 		}
+
+	}
+
+	public static boolean writeConfig(String key, Boolean value) {
+		if(config.has(key)) {
+			System.out.println("has");
+			config.remove(key);
+
+		}
+		System.out.println(key + ":" + value);
+		config.addProperty(key, value);
 		
+		try {
+			FileWriter fw = new FileWriter(configFile);
+			fw.write(config.toString());
+			System.out.println(config.toString());
+			
+			fw.flush();
+			fw.close();
+			return true;
+		} catch (IOException e) {
+			System.out.println("SS: Something went wrong while writing to config.");
+			return false;
+		}
+
 	}
 
 	public JsonObject getConfig() {
@@ -94,40 +120,78 @@ public class Config {
 	}
 
 	private static boolean validKey = false;
-	
+
 	public static boolean isValidKey() {
 
 		return validKey;
 	}
-	
+
 	public static void setValidKeyStatus(boolean newStatus) {
 		validKey = newStatus;
 	}
-	
+
 	public static UUID getApiKey() {
 
 		if(apiKey == null) {
-			
+
 			try {
 				apiKey = UUID.fromString(config.get("APIKey").getAsString());
 			} catch(NullPointerException e) {
 				System.out.println("SS: No key inside config.");
+				
+				
 				return null;
 			} catch(IllegalArgumentException e) {
+				System.out.println("SS: IAE.");
 				return null;
 			}
 			setValidKeyStatus(true);
-			
+
 		}
 
 		return apiKey;
 	}
+	
+	public static Boolean getDebugMode() {
+		if(debugMode == null) {
+			System.out.println(debugMode);
+			try {
+				System.out.println(config.get("Debug").getAsBoolean());
+				debugMode = config.get("Debug").getAsBoolean();
+			} catch(NullPointerException e) {
+				System.out.println("SS: No debug mode. Setting to false.");
+				toggleDebug(false);
+				return getDebugMode();
+			
+			} catch(IllegalArgumentException e) {
+				System.out.println("SS: IAE.");
+				return null;
+			}
 
-	
-	
+		}
+		System.out.println(debugMode);
+		return debugMode;
+	}
+
+
+
 	public static void setApiKey(UUID newKey) {
 		if(writeConfig("APIKey", newKey.toString())) {
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("§7Your API key has been changed to §6" + newKey + "§7."));
+			apiKey = newKey;
+		} else {
+			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("§cSomething went wrong."));
+		}
+	}
+
+	public static void toggleDebug(boolean mode) {
+		if(writeConfig("Debug", mode)) {
+			if(mode) {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("§7Debug mode is toggled §aon§7."));
+			} else {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("§7Debug mode is toggled §coff§7."));
+			}
+			debugMode = mode;
 		} else {
 			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("§cSomething went wrong."));
 		}
