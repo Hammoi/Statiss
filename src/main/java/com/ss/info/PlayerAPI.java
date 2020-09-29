@@ -115,7 +115,6 @@ public class PlayerAPI {
 
 		if(playsSkyblock == null) {
 			try {
-				System.out.println(PlayerAPI.getJsonAPI().getAsJsonObject("stats").getAsJsonObject("SkyBlock").getAsJsonObject("profiles").entrySet().size());
 				if(PlayerAPI.getJsonAPI().getAsJsonObject("stats").getAsJsonObject("SkyBlock").getAsJsonObject("profiles").entrySet().size() != 0) {
 					setPlaysSkyblock(true);
 				} else {

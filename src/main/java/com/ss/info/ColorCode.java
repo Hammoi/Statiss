@@ -57,53 +57,58 @@ public class ColorCode {
 
 	}
 
-	public static String skillColor(int level) {
-		if(level < 10) {
-			return "§4" + level;
-		} else if(level < 20) {
-			return "§c" + level;
-		} else if(level < 30) {
-			return "§e" + level;
-		} else if(level < 40) {
-			return "§a" + level;
-		} else if(level < 50) {
-			return "§2" + level;
-		} else if(level == 50) {
-			return "§2§l" + level;
-		} else return "";
-	}
+//	public static String skillColor(int level) {
+//		if(level < 10) {
+//			return "§4" + level;
+//		} else if(level < 20) {
+//			return "§c" + level;
+//		} else if(level < 30) {
+//			return "§e" + level;
+//		} else if(level < 40) {
+//			return "§a" + level;
+//		} else if(level < 50) {
+//			return "§2" + level;
+//		} else if(level == 50) {
+//			return "§2§l" + level;
+//		} else return "";
+//	}
 
-	public static String skillColor(double level) {
-		if(level < 10) {
+	public static String skillColor(double level, int max) {
+		int x = max/5;
+		if(level < x) {
 			return "§4" + level;
-		} else if(level < 20) {
+		} else if(level < x*2) {
 			return "§c" + level;
-		} else if(level < 30) {
+		} else if(level < x*3) {
 			return "§e" + level;
-		} else if(level < 40) {
+		} else if(level < x*4) {
 			return "§a" + level;
-		} else if(level < 50) {
+		} else if(level < x*5) {
 			return "§2" + level;
-		} else if(level == 50) {
+		} else if(level == max) {
 			return "§2§l" + level;
 		} else return "";
 	}
 	
-	public static String runescraftingColor(double level) {
-		if(level < 5) {
-			return "§4" + level;
-		} else if(level < 10) {
-			return "§c" + level;
-		} else if(level < 15) {
-			return "§e" + level;
-		} else if(level < 20) {
-			return "§a" + level;
-		} else if(level < 25) {
-			return "§2" + level;
-		} else if(level == 25) {
-			return "§2§l" + level;
-		} else return "";
+	public static String skillColor(String level, int max) {
+		return skillColor(Double.parseDouble(level), max);
 	}
+	
+//	public static String runescraftingColor(double level) {
+//		if(level < 5) {
+//			return "§4" + level;
+//		} else if(level < 10) {
+//			return "§c" + level;
+//		} else if(level < 15) {
+//			return "§e" + level;
+//		} else if(level < 20) {
+//			return "§a" + level;
+//		} else if(level < 25) {
+//			return "§2" + level;
+//		} else if(level == 25) {
+//			return "§2§l" + level;
+//		} else return "";
+//	}
 
 	public static String slayerColor(int level) {
 		switch(level) {

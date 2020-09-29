@@ -146,7 +146,6 @@ public class Sscontrols implements ICommand {
 				}
 				break;
 			case "toggledebug":
-				System.out.println(Config.getDebugMode());
 				if(Config.getDebugMode()) {
 					Config.toggleDebug(false);
 				} else {

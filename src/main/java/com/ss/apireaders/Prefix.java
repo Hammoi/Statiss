@@ -108,8 +108,8 @@ public class Prefix {
 
 		if(playerJson.has("rank")) {
 			hasPlusColor = false;
-
-			switch(PlayerAPI.getJsonAPI().get("rank").getAsString()) {
+			System.out.println(playerJson.get("rank").getAsString());
+			switch(playerJson.get("rank").getAsString()) {
 			case "YOUTUBER":
 				playerRank = "§c[§fYOUTUBE§c] ";
 				break;

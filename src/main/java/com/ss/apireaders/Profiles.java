@@ -52,8 +52,6 @@ public class Profiles {
 				PlayerAPI.badAPI();
 			}
 		}
-
-		System.out.println(activeProfile);
 		return activeProfile;
 	}
 

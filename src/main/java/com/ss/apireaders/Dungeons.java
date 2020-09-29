@@ -1,182 +1,452 @@
 package com.ss.apireaders;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.google.gson.JsonObject;
 import com.ss.info.PlayerAPI;
+import com.ss.info.Util;
 
 public class Dungeons {
 
 	private JsonObject dungeonStats = Profiles.getActiveProfile().getAsJsonObject("members").getAsJsonObject(PlayerAPI.getPlayerUUID().toString().replace("-", "")).get("dungeons").getAsJsonObject();
+	private JsonObject catacombStats = dungeonStats.getAsJsonObject("dungeon_types").getAsJsonObject("catacombs");
 	private JsonObject classStats = dungeonStats.getAsJsonObject("player_classes");
-	
-	private Double catacombsLevel;
-	
-	public Double getCatacombsLevel() {
-		
+
+	private double[] noLevel = new double[] {0,0};
+
+	private double[] catacombsLevel;
+
+	public double[] getCatacombsLevel() {
+
 		if(catacombsLevel == null) {
 			try {
-			setCatacombsLevel(getLevel(dungeonStats.getAsJsonObject("dungeon_types").getAsJsonObject("catacombs").get("experience").getAsDouble()));
+				setCatacombsLevel(Util.getLevel(Util.dungeonLevelReqs, catacombStats.get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setCatacombsLevel(0.0);
+				setCatacombsLevel(noLevel);
 			}
 		}
-		
+
 		return catacombsLevel;
 	}
 
 
-	public void setCatacombsLevel(Double catacombsLevel) {
+	public void setCatacombsLevel(double[] catacombsLevel) {
 		this.catacombsLevel = catacombsLevel;
 	}
-	
+
 	private String activeClass;
-	
+
 	public String getActiveClass() {
-		
+
 		if(activeClass == null) {
 			try {
-			setActiveClass(WordUtils.capitalizeFully(dungeonStats.get("selected_dungeon_class").getAsString()));
+				setActiveClass(WordUtils.capitalizeFully(dungeonStats.get("selected_dungeon_class").getAsString()));
 			} catch(NullPointerException e) {
 				setActiveClass("");
 			}
 		}
-		
+
 		return activeClass;
 	}
-	
+
+	public double[][] getAllClasses() {
+		return new double[][] {getArcherLevel(), getBerserkLevel(), getMageLevel(), getTankLevel(), getHealerLevel()};
+	}
+
 	public void setActiveClass(String newClass) {
 		this.activeClass = newClass;
 	}
-	
-	
-	private Double archerLevel;
-	
-	public Double getArcherLevel() {
-		
+
+
+	private double[] archerLevel;
+
+	public double[] getArcherLevel() {
+
 		if(archerLevel == null) {
 			try {
-			setArcherLevel(getLevel(classStats.getAsJsonObject("archer").get("experience").getAsDouble()));
+				setArcherLevel(Util.getLevel(Util.dungeonLevelReqs, classStats.getAsJsonObject("archer").get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setArcherLevel(0.0);
+				setArcherLevel(noLevel);
 			}
 		}
-		
+
 		return archerLevel;
 	}
 
 
-	public void setArcherLevel(Double archerLevel) {
+	public void setArcherLevel(double[] archerLevel) {
 		this.archerLevel = archerLevel;
 	}
-	
-	private Double berserkLevel;
-	
-	public Double getBerserkLevel() {
-		
+
+	private double[] berserkLevel;
+
+	public double[] getBerserkLevel() {
+
 		if(berserkLevel == null) {
 			try {
-			setBerserkLevel(getLevel(classStats.getAsJsonObject("berserk").get("experience").getAsDouble()));
+				setBerserkLevel(Util.getLevel(Util.dungeonLevelReqs, classStats.getAsJsonObject("berserk").get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setBerserkLevel(0.0);
+				setBerserkLevel(noLevel);
 			}
 		}
-		
+
 		return berserkLevel;
 	}
 
 
-	public void setBerserkLevel(Double berserkLevel) {
+	public void setBerserkLevel(double[] berserkLevel) {
 		this.berserkLevel = berserkLevel;
 	}
-	
-	private Double mageLevel;
-	
-	public Double getMageLevel() {
-		
+
+	private double[] mageLevel;
+
+	public double[] getMageLevel() {
+
 		if(mageLevel == null) {
 			try {
-			setMageLevel(getLevel(classStats.getAsJsonObject("mage").get("experience").getAsDouble()));
+				setMageLevel(Util.getLevel(Util.dungeonLevelReqs, classStats.getAsJsonObject("mage").get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setMageLevel(0.0);
+				setMageLevel(noLevel);
 			}
 		}
-		
+
 		return mageLevel;
 	}
 
 
-	public void setMageLevel(Double mageLevel) {
+	public void setMageLevel(double[] mageLevel) {
 		this.mageLevel = mageLevel;
 	}
-	
-	private Double tankLevel;
 
-	public Double getTankLevel() {
-		
+	private double[] tankLevel;
+
+	public double[] getTankLevel() {
+
 		if(tankLevel == null) {
 			try {
-			setTankLevel(getLevel(classStats.getAsJsonObject("tank").get("experience").getAsDouble()));
+				setTankLevel(Util.getLevel(Util.dungeonLevelReqs, classStats.getAsJsonObject("tank").get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setTankLevel(0.0);
+				setTankLevel(noLevel);
 			}
 		}
-		
+
 		return tankLevel;
 	}
 
 
-	public void setTankLevel(Double tankLevel) {
+	public void setTankLevel(double[] tankLevel) {
 		this.tankLevel = tankLevel;
 	}
-	
-	private Double healerLevel;
 
-	public Double getHealerLevel() {
-		
+	private double[] healerLevel;
+
+	public double[] getHealerLevel() {
+
 		if(healerLevel == null) {
 			try {
-			setHealerLevel(getLevel(classStats.getAsJsonObject("healer").get("experience").getAsDouble()));
+				setHealerLevel(Util.getLevel(Util.dungeonLevelReqs, classStats.getAsJsonObject("healer").get("experience").getAsDouble()));
 			} catch(NullPointerException e) {
-				setHealerLevel(0.0);
+				setHealerLevel(noLevel);
 			}
 		}
-		
+
 		return healerLevel;
 	}
 
 
-	public void setHealerLevel(Double healerLevel) {
+	public void setHealerLevel(double[] healerLevel) {
 		this.healerLevel = healerLevel;
 	}
+
+
 	
-	
-	private double getLevel(Double xp) {
-		int[] dungeonLevelReqs = {50, 75, 110, 160, 230, 330, 470, 670, 950, 1340, 1890, 2665, 3760, 5260, 7380, 10300, 14400, 20000, 27600, 38000, 52500, 71500, 97000, 132000, 180000, 243000, 328000, 445000, 600000, 800000, 1065000, 1410000, 1900000, 2500000, 3300000, 4300000, 5600000, 7200000, 9200000, 12000000, 15000000, 19000000, 24000000, 30000000, 38000000, 48000000, 60000000, 75000000, 93000000, 116250000};
+
+	private int[] floorsCompleted;
 
 
-		double level = 0;
-		for(int x = 0; x <50; x++) {
+	public int[] getFloorsCompleted() {
 
-			if(level == 50) {
-				break;
-			}
+		if(floorsCompleted == null) {
 
-			if(xp >= dungeonLevelReqs[x]) {
-				xp -= dungeonLevelReqs[x];
-				level += 1;
-			} else {
-				level += xp / dungeonLevelReqs[(int) level];
-				DecimalFormat f = new DecimalFormat("0.00");
-				level = Double.parseDouble(f.format(level));
-				break;
-			}
+			setFloorsCompleted(getData("tier_completions"));
+
+
 		}
-		return level;
+		return floorsCompleted;
 	}
 
 
-	
+	public void setFloorsCompleted(int[] floorsCompleted) {
+		this.floorsCompleted = floorsCompleted;
+	}
+
+	private int[] floorsStarted;
+
+	public int[] getFloorsStarted() {
+
+
+		if(floorsStarted == null) {
+				setFloorsStarted(getData("times_played"));
+
+		}
+
+		return floorsStarted;
+	}
+
+
+	public void setFloorsStarted(int[] floorsStarted) {
+		this.floorsStarted = floorsStarted;
+	}
+
+	private int[] watcherKills;
+	private int[] fastestTime;
+	private int[] fastestTimeS;
+	private int[] fastestTimeSPlus;
+	private int[] bestScore;
+	private int[] archerMostDamage;
+	private int[] berserkMostDamage;
+	private int[] healerMostDamage;
+	private int[] mageMostDamage;
+	private int[] tankMostDamage;
+	private int[] mostHealing;
+	private int[] totalMobsKilled;
+	private int[] mostMobsKilled;
+
+	private Integer secretsFound;
+
+	public Integer getSecretsFound() {
+
+		if(secretsFound == null) {
+			setSecretsFound(PlayerAPI.getJsonAPI().getAsJsonObject("achievements").get("skyblock_treasure_hunter").getAsInt());
+		}
+
+		return secretsFound;
+	}
+
+	public void setSecretsFound(Integer newAmount) {
+		this.secretsFound = newAmount;
+	}
+
+
+	private int[] getData(String key) {
+		int[] list = new int[] {-1,-1,-1,-1,-1,-1};
+
+		try {
+
+			catacombStats.getAsJsonObject(key).entrySet().forEach((value) -> {
+				list[Integer.parseInt(value.getKey())] = value.getValue().getAsInt();
+			});
+
+
+		} catch(NullPointerException e) {
+			return list;
+		}
+
+		return list;
+	}
+
+	public int[] getWatcherKills() {
+
+		if(watcherKills == null) {
+			setWatcherKills(getData("watcher_kills"));
+		}
+
+		return watcherKills;
+	}
+
+
+	public void setWatcherKills(int[] watcherKills) {
+		this.watcherKills = watcherKills;
+	}
+
+
+	public int[] getFastestTime() {
+
+		if(fastestTime == null) {
+			setFastestTime(getData("fastest_time"));
+		}
+
+		return fastestTime;
+	}
+
+
+	public void setFastestTime(int[] fastestTime) {
+		this.fastestTime = fastestTime;
+	}
+
+
+	public int[] getFastestTimeS() {
+
+
+
+		if(fastestTimeS == null) {
+			setFastestTimeS(getData("fastest_time_s"));
+		}
+
+		return fastestTimeS;
+	}
+
+
+	public void setFastestTimeS(int[] fastestTimeS) {
+		this.fastestTimeS = fastestTimeS;
+	}
+
+
+	public int[] getFastestTimeSPlus() {
+
+		if(fastestTimeSPlus == null) {
+			setFastestTimeSPlus(getData("fastest_time_s_plus"));
+		}
+
+		return fastestTimeSPlus;
+	}
+
+
+	public void setFastestTimeSPlus(int[] fastestTimeSPlus) {
+		this.fastestTimeSPlus = fastestTimeSPlus;
+	}
+
+
+	public int[] getBestScore() {
+
+		if(bestScore == null) {
+			setBestScore(getData("best_score"));
+		}
+
+		return bestScore;
+	}
+
+
+	public void setBestScore(int[] bestScore) {
+		this.bestScore = bestScore;
+	}
+
+
+	public int[] getArcherMostDamage() {
+
+		if(archerMostDamage == null) {
+			setArcherMostDamage(getData("most_damage_archer"));
+		}
+
+		return archerMostDamage;
+	}
+
+
+	public void setArcherMostDamage(int[] archerMostDamage) {
+		this.archerMostDamage = archerMostDamage;
+	}
+
+
+	public int[] getBerserkMostDamage() {
+
+		if(berserkMostDamage == null) {
+			setBerserkMostDamage(getData("most_damage_berserk"));
+		}
+
+		return berserkMostDamage;
+	}
+
+
+	public void setBerserkMostDamage(int[] berserkMostDamage) {
+		this.berserkMostDamage = berserkMostDamage;
+	}
+
+
+	public int[] getHealerMostDamage() {
+
+		if(healerMostDamage == null) {
+			setHealerMostDamage(getData("most_damage_healer"));
+		}
+
+		return healerMostDamage;
+	}
+
+
+	public void setHealerMostDamage(int[] healerMostDamage) {
+		this.healerMostDamage = healerMostDamage;
+	}
+
+
+	public int[] getMageMostDamage() {
+
+		if(mageMostDamage == null) {
+			setMageMostDamage(getData("most_damage_mage"));
+		}
+
+		return mageMostDamage;
+	}
+
+
+	public void setMageMostDamage(int[] mageMostDamage) {
+		this.mageMostDamage = mageMostDamage;
+	}
+
+
+	public int[] getTankMostDamage() {
+
+		if(tankMostDamage == null) {
+			setTankMostDamage(getData("most_damage_tank"));
+		}
+
+		return tankMostDamage;
+	}
+
+
+	public void setTankMostDamage(int[] tankMostDamage) {
+		this.tankMostDamage = tankMostDamage;
+	}
+
+
+	public int[] getMostHealing() {
+
+		if(mostHealing == null) {
+			setMostHealing(getData("most_healing"));
+		}
+
+		return mostHealing;
+	}
+
+
+	public void setMostHealing(int[] mostHealing) {
+		this.mostHealing = mostHealing;
+	}
+
+
+	public int[] getTotalMobsKilled() {
+
+		if(totalMobsKilled == null) {
+			setTotalMobsKilled(getData("mobs_killed"));
+		}
+
+		return totalMobsKilled;
+	}
+
+
+	public void setTotalMobsKilled(int[] totalMobsKilled) {
+		this.totalMobsKilled = totalMobsKilled;
+	}
+
+
+	public int[] getMostMobsKilled() {
+
+		if(mostMobsKilled == null) {
+			setMostMobsKilled(getData("most_mobs_killed"));
+		}
+
+		return mostMobsKilled;
+	}
+
+
+	public void setMostMobsKilled(int[] mostMobsKilled) {
+		this.mostMobsKilled = mostMobsKilled;
+	}
+
+
+
+
+
+
 }

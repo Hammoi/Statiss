@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +50,7 @@ import com.ss.info.GuildLevels;
 import com.ss.info.Islands;
 import com.ss.info.PetLevels;
 import com.ss.info.PlayerAPI;
+import com.ss.info.Util;
 import com.ss.info.GameItem;
 
 import net.hypixel.api.HypixelAPI;
@@ -240,20 +242,23 @@ public class SstatsThread implements Runnable{
 
 		String playerRank = prefix.getPlayerRankString();
 
+		DecimalFormat nf = new DecimalFormat("#.#");
+		nf.setGroupingUsed(true);
+		nf.setGroupingSize(3);
 
 
 
 		PlayerInfo playerInfo = new PlayerInfo();
 		String playerProfileHover = "§aCharacter Information \n" +
 				"§7Rank: " + (prefix.getPlayerRankString().equals("§7") ? "§8Default" : prefix.getPlayerRankString()).replace("[", "").replace("]", "") + "\n" +
-				"§7Level: §6" + playerInfo.getNetworkLevel().intValue() + "\n" +
-				"§7Experience until next Level: §6" + playerInfo.getExptoNextLevel() + "\n" +
-				"§7Achievement Points: §e" + playerInfo.getAchievementPoints() + "\n" +
-				"§7Quests Completed: §6" + playerInfo.getQuestsCompleted() + "\n" +
-				"§7Karma: §d" + playerInfo.getKarma();
+				"§7Level: §6" + nf.format(playerInfo.getNetworkLevel().intValue()) + "\n" +
+				"§7Experience until next Level: §6" + nf.format(playerInfo.getExptoNextLevel()) + "\n" +
+				"§7Achievement Points: §e" + nf.format(playerInfo.getAchievementPoints()) + "\n" +
+				"§7Quests Completed: §6" + nf.format(playerInfo.getQuestsCompleted()) + "\n" +
+				"§7Karma: §d" + nf.format(playerInfo.getKarma());
 
 		System.out.println("SS: Grabbed character information.");
-		
+
 		if(Config.getDebugMode()) {
 			sendMessage(player, "§7Grabbed character information.");
 		}
@@ -293,7 +298,6 @@ public class SstatsThread implements Runnable{
 		} catch(NullPointerException e) {}
 
 
-
 		if(PlayerAPI.doesPlaySkyblock()) {
 			if(pageNumber == null || pageNumber.equals("1")) {
 				Pets pets = new Pets();
@@ -327,7 +331,7 @@ public class SstatsThread implements Runnable{
 
 
 				System.out.println("SS: Grabbed player's skyblock profile names.");
-				
+
 				if(Config.getDebugMode()) {
 					sendMessage(player, "§7Grabbed player's skyblock profile names.");
 				}
@@ -345,7 +349,7 @@ public class SstatsThread implements Runnable{
 				if(Config.getDebugMode()) {
 					sendMessage(player, "§7Grabbed player's co-op members.");
 				}
-				
+
 				DateTimeFormatter formatter =
 						DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 						.withLocale(Locale.US)
@@ -368,7 +372,7 @@ public class SstatsThread implements Runnable{
 				if(Config.getDebugMode()) {
 					sendMessage(player, "§7Grabbed player's skyblock profile information.");
 				}
-				
+
 				double skillAverage = Double.parseDouble(String.format(Locale.US, "%.2f", ((double) skills.getMining() +
 						skills.getCombat() +
 						skills.getForaging() +
@@ -381,22 +385,22 @@ public class SstatsThread implements Runnable{
 
 
 				String skillHover = "§aPlayer Skills \n" + 
-						"§7Mining: " + ColorCode.skillColor(skills.getMining()) + "\n" + 
-						"§7Combat: " + ColorCode.skillColor(skills.getCombat()) + "\n" + 
-						"§7Foraging: " + ColorCode.skillColor(skills.getForaging()) + "\n" + 
-						"§7Fishing: " + ColorCode.skillColor(skills.getFishing()) + "\n" + 
-						"§7Farming: " + ColorCode.skillColor(skills.getFarming()) + "\n" + 
-						"§7Alchemy: " + ColorCode.skillColor(skills.getAlchemy()) + "\n" + 
-						"§7Enchanting: " + ColorCode.skillColor(skills.getEnchanting()) + "\n" + 
-						"§7Taming: " + ColorCode.skillColor(skills.getTaming()) +
-						(skills.getApiStatus() ? "\n\n§7Carpentry: " + ColorCode.skillColor(skills.getCarpentry()) + "\n§7Runescrafting: " + ColorCode.runescraftingColor(skills.getRunescrafting()) : "\n\n§cSkill API Disabled.");
+						"§7Mining: " + ColorCode.skillColor(skills.getMining(), 50) + "\n" + 
+						"§7Combat: " + ColorCode.skillColor(skills.getCombat(), 50) + "\n" + 
+						"§7Foraging: " + ColorCode.skillColor(skills.getForaging(), 50) + "\n" + 
+						"§7Fishing: " + ColorCode.skillColor(skills.getFishing(), 50) + "\n" + 
+						"§7Farming: " + ColorCode.skillColor(skills.getFarming(), 50) + "\n" + 
+						"§7Alchemy: " + ColorCode.skillColor(skills.getAlchemy(), 50) + "\n" + 
+						"§7Enchanting: " + ColorCode.skillColor(skills.getEnchanting(), 50) + "\n" + 
+						"§7Taming: " + ColorCode.skillColor(skills.getTaming(), 50) +
+						(skills.getApiStatus() ? "\n\n§7Carpentry: " + ColorCode.skillColor(skills.getCarpentry(), 50) + "\n§7Runescrafting: " + ColorCode.skillColor(skills.getRunescrafting(), 25) : "\n\n§cSkill API Disabled.");
 
 				System.out.println("SS: Grabbed player's skyblock skills information.");
 
 				if(Config.getDebugMode()) {
 					sendMessage(player, "§7Grabbed player's skyblock skills information.");
 				}
-				
+
 				String petHover = new String();
 
 				if(pets.getPetsSortedByExp().equals("")) {
@@ -411,7 +415,7 @@ public class SstatsThread implements Runnable{
 				if(Config.getDebugMode()) {
 					sendMessage(player, "§7Grabbed player's skyblock pets information.");
 				}
-				
+
 				info.addAll(Arrays.asList(new IChatComponent[] {
 						new ChatComponentTranslation("§8--------------------------------"),
 						hoverText("§8Stats of ", new String[] {fullName + " ", guild.getGuildTag()}, new String[] {playerProfileHover, guildHover}),
@@ -424,7 +428,7 @@ public class SstatsThread implements Runnable{
 					info.add(hoverText("§7Profile: ", new String[] {"§cUnknown"}, new String[] {profileHover}));
 				}
 				info.addAll(Arrays.asList(new IChatComponent[] {	
-						hoverText("§7Skill Average: ", new String[] {ColorCode.skillColor(skillAverage)}, new String[] {skillHover}),
+						hoverText("§7Skill Average: ", new String[] {ColorCode.skillColor(skillAverage, 50)}, new String[] {skillHover}),
 						hoverText("§7Active Pet: ", new String[] {pets.getFullPetString()}, new String[] {petHover}),
 						new ChatComponentTranslation("§7Equipped Armor:"),
 						hoverText("   ", new String[] {armors.getHelmetName()}, new String[] {armors.getHelmetLore()}),
@@ -471,31 +475,28 @@ public class SstatsThread implements Runnable{
 					Damage dmg = new Damage();
 
 					StringBuilder revHover = new StringBuilder("§aRevenant Slayer \n" +
-							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getRevXp())) + slayer.getRevXp() + "\n" +
+							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getRevXp())) + nf.format(slayer.getRevXp()) + "\n" +
 							"§8Tiers Slain:");
 
 					for(int s = 0; s < slayer.getRevsSlain().size(); s++) {
-						revHover.append("\n   §7T" + (s+1) + "'s: §6" + slayer.getRevsSlain().get(s));
+						revHover.append("\n   §7T" + (s+1) + "'s: §6" + nf.format(slayer.getRevsSlain().get(s)));
 					}
 
 					StringBuilder taranHover = new StringBuilder("§cTarantula Slayer \n" +
-							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getTaranXp())) +  slayer.getTaranXp() + "\n" +
+							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getTaranXp())) +  nf.format(slayer.getTaranXp()) + "\n" +
 							"§8Tiers Slain:");
 
 					for(int s = 0; s < slayer.getTaransSlain().size(); s++) {
-						taranHover.append("\n   §7T" + (s+1) + "'s: §6" + slayer.getTaransSlain().get(s));
+						taranHover.append("\n   §7T" + (s+1) + "'s: §6" + nf.format(slayer.getTaransSlain().get(s)));
 					}
 
 					StringBuilder svenHover = new StringBuilder("§3Sven Slayer \n" +
-							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getSvenXp())) + slayer.getSvenXp() + "\n" +
+							"§7XP: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getSvenXp())) + nf.format(slayer.getSvenXp()) + "\n" +
 							"§8Tiers Slain:");
 
 					for(int s = 0; s < slayer.getSvensSlain().size(); s++) {
-						svenHover.append("\n   §7T" + (s+1) + "'s: §6" + slayer.getSvensSlain().get(s));
+						svenHover.append("\n   §7T" + (s+1) + "'s: §6" + nf.format(slayer.getSvensSlain().get(s)));
 					}
-
-					DecimalFormat formatter = new DecimalFormat("0.0");
-
 					info.addAll(Arrays.asList(new IChatComponent[] {	
 							new ChatComponentTranslation("§8--------------------------------"),
 							hoverText("§8Stats of ", new String[] {fullName + " ", guild.getGuildTag()}, new String[] {playerProfileHover, guildHover}),
@@ -505,42 +506,127 @@ public class SstatsThread implements Runnable{
 							hoverText("   ", new String[] {"§3Sven §7Level: " + ColorCode.slayerColor(Slayers.getSlayerLevel(slayer.getSvenXp())) + Slayers.getSlayerLevel(slayer.getSvenXp())}, new String[] {svenHover.toString()}),
 							new ChatComponentTranslation("§7Fairy Souls: " + (souls.getSoulsCollected() >= FairySouls.totalSouls ? "§5" : "§d") + souls.getSoulsCollected() + "§7/§5" + FairySouls.totalSouls),
 							new ChatComponentTranslation("§7Unique Talismans: " + (inventory.getInventoryAPIStatus() ? (new Integer(totalUniqueTalismans.size()) >= Talismans.totalTalismans ? "§6" : "§e") + totalUniqueTalismans.size() + "§7/§6" + Talismans.totalTalismans : "§cAPI is Disabled.")),
-							new ChatComponentTranslation("§7Purse: §6" + formatter.format(BigDecimal.valueOf(purse.getPurse()))),
-							new ChatComponentTranslation("§7Highest Critical Damage: §e" + dmg.getHighestCrit()),
+							new ChatComponentTranslation("§7Purse: §6" + nf.format(purse.getPurse())),
+							new ChatComponentTranslation("§7Highest Critical Damage: §e" + nf.format(dmg.getHighestCrit())),
 							clickText("§eNext Page", new SStats().getCommandName() + " " + args[0] + (profileName != null ? " " + profileName : "") + " 3"),
 							new ChatComponentTranslation("§8--------------------------------")
 					}));
 					System.out.println("SS: Successfully sent page two of player's info.");
-					
+
 					if(Config.getDebugMode()) {
 						sendMessage(player, "§7Successfully sent page two of player's info.");
 					}
-					
+
 					break;
 				case "3":
-					
+
 					Dungeons dungeons = new Dungeons();
-					
+
+
+					String[] hovers = new String[6];
+
+					for(int x = 0; x < 6; x++) {
+
+						StringBuilder progressBar = new StringBuilder("§2--------------------");
+						String hover;
+						if(x == 5) {
+							progressBar.insert(2 + (int) Math.ceil((20 * dungeons.getCatacombsLevel()[1]) / Util.dungeonLevelReqs[(int) dungeons.getCatacombsLevel()[0]]), "§f");
+							hover = "§7Progress to Level " + (int) Math.ceil(dungeons.getCatacombsLevel()[0]) + ": §e" + "\n"
+									+ progressBar + " §e" + nf.format(dungeons.getCatacombsLevel()[1]) + "§6/§e" + nf.format(Util.dungeonLevelReqs[(int) dungeons.getCatacombsLevel()[0]]);
+
+						} else {
+							progressBar.insert(2 + (int) Math.ceil((20 * dungeons.getAllClasses()[x][1]) / Util.dungeonLevelReqs[(int) dungeons.getAllClasses()[x][0]]), "§f");
+							hover = "§7Progress to Level " + (int) Math.ceil(dungeons.getAllClasses()[x][0]) + ": §e" + "\n"
+									+ progressBar + " §e" + nf.format(dungeons.getAllClasses()[x][1]) + "§6/§e" + nf.format(Util.dungeonLevelReqs[(int) dungeons.getAllClasses()[x][0]]);
+
+						}
+
+
+						hovers[x] = hover;
+
+						StringBuilder t = new StringBuilder();
+
+						for(double[] d : dungeons.getAllClasses()) {
+							t.append(d[0] + ", ");
+						}
+
+					}
+
 					info.addAll(Arrays.asList(new IChatComponent[] {	
 							new ChatComponentTranslation("§8--------------------------------"),
 							hoverText("§8Stats of ", new String[] {fullName + " ", guild.getGuildTag()}, new String[] {playerProfileHover, guildHover}),
-							new ChatComponentTranslation("§cCatacombs§7 Level: " + ColorCode.skillColor(dungeons.getCatacombsLevel())),
+							hoverText("§cCatacombs§7 Level: ", new String[] {ColorCode.skillColor(dungeons.getCatacombsLevel()[0], 50)}, new String[] {hovers[5]}),
 							new ChatComponentTranslation("§7Active Class: " + (dungeons.getActiveClass().equals("") ? "§cN/A" : "§a" + dungeons.getActiveClass())),
-							new ChatComponentTranslation("§7Class Levels:"),
-							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("archer") ? "§a" : "§7") + "   Archer§7: " + ColorCode.skillColor(dungeons.getArcherLevel())),
-							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("berserk") ? "§a" : "§7") + "   Berserk§7: " + ColorCode.skillColor(dungeons.getBerserkLevel())),
-							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("mage") ? "§a" : "§7") + "   Mage§7: " + ColorCode.skillColor(dungeons.getMageLevel())),
-							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("tank") ? "§a" : "§7") + "   Tank§7: " + ColorCode.skillColor(dungeons.getTankLevel())),
-							new ChatComponentTranslation((dungeons.getActiveClass().equalsIgnoreCase("healer") ? "§a" : "§7") + "   Healer§7: " + ColorCode.skillColor(dungeons.getHealerLevel())),
+							new ChatComponentTranslation("§7Class Levels:")
+					}));
+
+					String[] classes = new String[] {"Archer", "Berserk", "Mage", "Tank", "Healer"};
+
+					for(int x = 0; x < 5; x++) {
+						info.add(hoverText("   ", new String[] {(dungeons.getActiveClass().equals(classes[x]) ? "§a" : "§7") + classes[x] + "§7: " + ColorCode.skillColor(dungeons.getAllClasses()[x][0], 50)}, new String[] {hovers[x]}));
+					}
+
+					String[] bosses = new String[] {"Bonzo", "Scarf", "The Professor", "Thorn", "Livid", "Sadan", "Maxor", "Goldor", "Storm", "Necron"};
+					info.add(new ChatComponentTranslation("§7Runs Completed:"));
+					try {
+						for(int x = 0; x < dungeons.getFloorsStarted().length; x++) {
+
+							if(dungeons.getFloorsStarted()[x] != -1) {
+								String hover = "§cThe Catacombs §8- " + (x == 0 ? "§eEntrance" : "§eFloor " + x) + "\n\n"
+										+ (x == 0 ? "" : "§7" + bosses[x-1] + " Kills: §a" + (dungeons.getFloorsCompleted()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getFloorsCompleted()[x])) + "\n")
+										+ "§7The Watcher Kills: " + (dungeons.getWatcherKills()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getWatcherKills()[x])) + "\n"
+										+ "§7Fastest Time: " + (dungeons.getFastestTime()[x] == -1 ? "§cN/A" : "§a" + (Util.milliToMinute(dungeons.getFastestTime()[x])[0] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTime()[x])[0] + "m " + (Util.milliToMinute(dungeons.getFastestTime()[x])[1] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTime()[x])[1]) + "s\n"
+										+ "§7Fastest Time (S): " + (dungeons.getFastestTimeS()[x] == -1 ? "§cN/A" : "§a" + (Util.milliToMinute(dungeons.getFastestTimeS()[x])[0] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTimeS()[x])[0] + "m " + (Util.milliToMinute(dungeons.getFastestTimeS()[x])[1] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTimeS()[x])[1]) + "s\n"
+										+ "§7Fastest Time (S+): " + (dungeons.getFastestTimeSPlus()[x] == -1 ? "§cN/A" : "§a" + (Util.milliToMinute(dungeons.getFastestTimeSPlus()[x])[0] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTimeSPlus()[x])[0] + "m " + (Util.milliToMinute(dungeons.getFastestTimeSPlus()[x])[1] < 10 ? "0" : "") + Util.milliToMinute(dungeons.getFastestTimeSPlus()[x])[1]) + "s\n"
+										+ "§7Best Score: " + (dungeons.getBestScore()[x] == -1 ? "§cN/A" : "§a" + dungeons.getBestScore()[x]) + "\n"
+										+ "§7Most Archer Damage: " + (dungeons.getArcherMostDamage()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getArcherMostDamage()[x])) + "\n"
+										+ "§7Most Berserk Damage: " + (dungeons.getBerserkMostDamage()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getBerserkMostDamage()[x])) + "\n"
+										+ "§7Most Healer Damage: " + (dungeons.getHealerMostDamage()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getHealerMostDamage()[x])) + "\n"
+										+ "§7Most Mage Damage: " + (dungeons.getMageMostDamage()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getMageMostDamage()[x])) + "\n"
+										+ "§7Most Tank Damage: " + (dungeons.getTankMostDamage()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getTankMostDamage()[x])) + "\n"
+										+ "§7Most Ally Healing: " + (dungeons.getMostHealing()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getMostHealing()[x])) + "\n"
+										+ "§7Total Enemies Killed: " + (dungeons.getTotalMobsKilled()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getTotalMobsKilled()[x])) + "\n"
+										+ "§7Most Enemies Killed: " + (dungeons.getMostMobsKilled()[x] == -1 ? "§cN/A" : "§a" + nf.format(dungeons.getMostMobsKilled()[x]));
+
+
+
+
+
+
+
+								info.add(hoverText("   ", new String[] {"§7" + (x == 0 ? "Entrance" : "Floor " + x) + ": " + (dungeons.getFloorsCompleted()[x] == dungeons.getFloorsStarted()[x] ? "§2" : "§a") + (dungeons.getFloorsCompleted()[x] == -1 ? "0" : nf.format(dungeons.getFloorsCompleted()[x])) + "§7/§2" + nf.format(dungeons.getFloorsStarted()[x])}, new String[] {hover}));
+							}
+						}
+					} catch(NullPointerException e) {
+						e.printStackTrace();
+						info.remove(info.size()-1);
+					}
+
+					int totalStartedRuns = 0;
+					int totalCompletedRuns = 0;
+
+					for(int x = 0; x<dungeons.getFloorsStarted().length; x++) {
+						totalStartedRuns += dungeons.getFloorsStarted()[x];
+						totalCompletedRuns += dungeons.getFloorsCompleted()[x];
+					}
+
+					double wlRatio = ((double) totalCompletedRuns) / totalStartedRuns * 100;
+
+					DecimalFormat pf = new DecimalFormat("#.##");
+					System.out.println((((double) totalCompletedRuns) / totalStartedRuns) * 100);
+					info.addAll(Arrays.asList(new IChatComponent[] {
+							hoverText("§7Win/Loss Ratio: ", new String[] {ColorCode.skillColor(pf.format(wlRatio), 100) + "%"}, new String[] {(totalStartedRuns == totalCompletedRuns ? "§2" : "§a") + totalCompletedRuns + " §7out of §2" + totalStartedRuns + " §7runs completed."} ),
+							new ChatComponentTranslation("§7Secrets Found: §6" + nf.format(dungeons.getSecretsFound())),
 							new ChatComponentTranslation("§8--------------------------------")
 					}));
-					
+
+
 					System.out.println("SS: Successfully sent page three of player's info.");
-					
+
 					if(Config.getDebugMode()) {
 						sendMessage(player, "§7Successfully sent page three of player's info.");
 					}
-					
+
 					break;
 				}
 				//Auction Info
@@ -548,11 +634,11 @@ public class SstatsThread implements Runnable{
 			} 
 		} else {
 			System.out.println("SS: Player does not play skyblock.");
-			
+
 			if(Config.getDebugMode()) {
 				sendMessage(player, "§7Player does not play skyblock.");
 			}
-			
+
 			info.addAll(Arrays.asList(new IChatComponent[] {
 					new ChatComponentTranslation("§8--------------------------------"),
 					hoverText("§8Stats of " + fullName + " ", new String[] {guild.getGuildTag()}, new String[] {guildHover}),
@@ -560,7 +646,7 @@ public class SstatsThread implements Runnable{
 					new ChatComponentTranslation("§8--------------------------------")
 			}));
 			System.out.println("SS: Successfully sent player info.");
-			
+
 			if(Config.getDebugMode()) {
 				sendMessage(player, "§7Successfully sent player info.");
 			}
@@ -575,7 +661,6 @@ public class SstatsThread implements Runnable{
 
 
 		setAPIStatus(null);
-		//Slayer TODO
 		//Minions
 
 

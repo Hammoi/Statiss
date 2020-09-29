@@ -92,17 +92,14 @@ public class Config {
 
 	public static boolean writeConfig(String key, Boolean value) {
 		if(config.has(key)) {
-			System.out.println("has");
 			config.remove(key);
 
 		}
-		System.out.println(key + ":" + value);
 		config.addProperty(key, value);
 		
 		try {
 			FileWriter fw = new FileWriter(configFile);
 			fw.write(config.toString());
-			System.out.println(config.toString());
 			
 			fw.flush();
 			fw.close();
@@ -154,9 +151,7 @@ public class Config {
 	
 	public static Boolean getDebugMode() {
 		if(debugMode == null) {
-			System.out.println(debugMode);
 			try {
-				System.out.println(config.get("Debug").getAsBoolean());
 				debugMode = config.get("Debug").getAsBoolean();
 			} catch(NullPointerException e) {
 				System.out.println("SS: No debug mode. Setting to false.");
@@ -169,7 +164,6 @@ public class Config {
 			}
 
 		}
-		System.out.println(debugMode);
 		return debugMode;
 	}
 
