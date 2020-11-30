@@ -10,3 +10,5 @@ Setup:
   Stalk other players using /ss [name]!
 
   (If the lookup process seems to be taking too long, try /ssc restartApi and check again.)
+
+Project haven't been updated since lost of interest in the game.
